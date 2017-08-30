@@ -179,29 +179,12 @@ You should see the OpenShift version.
 In order to login, we will use the `oc` command and then specify the server that we
 want to authenticate to.
 
-{% if MINISHIFT == true %}
-
-When CDK starts, it prints the OpenShift Web Console in the logs. Alternatively, 
-you can use the `minishift console --url` to find it out. 
-
 Login to OpenShift.
 
 [source]
 ----
-$ oc login OPENSHIFT-CONSOLE-URL
+$ oc login {{OPENSHIFT_CONSOLE_URL}}
 ----
-
-{% else %}
-
-Issue the following command and replace `OPENSHIFT-CONSOLE-URL` 
-with your OpenShift Web Console url:
-
-[source]
-----
-$ oc login OPENSHIFT-CONSOLE-URL
-----
-
-{% endif %}
 
 You may see the following output:
 
@@ -223,12 +206,12 @@ corporate-standard CA that you already have installed on your system.
 ====
 On some versions of Microsoft Windows, you may get an error that the
 server has an invalid x.509 certificate.  If you receive this error, enter in
-the following command and replace `OPENSHIFT-CONSOLE-URL` 
+the following command and replace `{{OPENSHIFT_CONSOLE_URL}}` 
 with your OpenShift Web Console url:
 
 [source]
 ----
-$ oc login OPENSHIFT-CONSOLE-URL --insecure-skip-tls-verify=true
+$ oc login {{OPENSHIFT_CONSOLE_URL}} --insecure-skip-tls-verify=true
 ----
 ====
 

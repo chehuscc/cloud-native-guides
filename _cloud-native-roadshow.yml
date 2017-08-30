@@ -14,6 +14,7 @@ vars:
   REMOTE_DEBUGGER_JBDS: true
   REMOTE_DEBUGGER_IDEA: true
   MINISHIFT: false
+  OPENSHIFT_CONSOLE_URL: OPENSHIFT-CONSOLE-URL
   
 modules:
   activate:
