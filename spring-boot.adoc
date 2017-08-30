@@ -16,7 +16,7 @@ are already made by Spring Boot so that you can get started with minimum effort 
 
 #### Spring Boot Maven Project 
 
-The 'catalog-spring-boot' project has the following structure which shows the components of 
+The `catalog-spring-boot` project has the following structure which shows the components of 
 the Spring Boot project laid out in different subdirectories according to Maven best practices:
 
 
@@ -356,7 +356,7 @@ CAUTION: The route urls in your project would be different from the ones in this
 
 [source,bash]
 ----
-$ curl http://CATALOG-ROUTE-HOST/api/catalog
+$ curl http://{{CATALOG_ROUTE_HOST}}/api/catalog
 
 [{"itemId":"329299","name":"Red Fedora","desc":"Official Red Hat Fedora","price":34.99},...]
 ----

@@ -119,23 +119,13 @@ $ mvn vertx:run
 ...
 ----
 
-[NOTE]
-====
-You will see the following exception in the logs: 
-`java.io.FileNotFoundException: /.../kubernetes.io/serviceaccount/token`
-
-This is expected and is the result of Vert.x trying to import services form OpenShift. Since you are 
-running the API Gateway on your local machine, the lookup fails and falls back to the local service 
-lookup. It's all good!
-====
-
 Verify the application is working using `curl` in a new terminal window:
 
 [source,bash]
 ----
 $ curl http://localhost:8080
 
-{"message": "Hello Vert.x"}
+{"message": "Hello World"}
 ----
 
 Note that while the application is running using `mvn vertx:run`, you can make changes in the code
@@ -206,7 +196,7 @@ public class GatewayVerticle extends AbstractVerticle {
                             .setDefaultPort(Integer.getInteger("inventory.api.port", 9001))));
 
             // Zip all 3 requests
-            Single.zip(gatewayDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
+            Single.zip(catalogDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
                 // When everything is done
                 gateway = c;
                 inventory = i;
@@ -252,6 +242,16 @@ public class GatewayVerticle extends AbstractVerticle {
 }
 ----
 
+[NOTE]
+====
+You will see the following exception in the logs: 
+`java.io.FileNotFoundException: /.../kubernetes.io/serviceaccount/token`
+
+This is expected and is the result of Vert.x trying to import services form OpenShift. Since you are 
+running the API Gateway on your local machine, the lookup fails and falls back to the local service 
+lookup. It's all good!
+====
+
 Let's break down what happens in the above code. The `start` method creates an HTTP 
 server and a REST mapping to map `/api/products` to the `products` Java 
 method. 
@@ -292,7 +292,7 @@ public void start() {
                         .setDefaultPort(Integer.getInteger("inventory.api.port", 9001))));
 
         // Zip all 3 requests
-        Single.zip(gatewayDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
+        Single.zip(catalogDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
             // When everything is done
             gateway = c;
             inventory = i;
@@ -322,7 +322,7 @@ private void products(RoutingContext rc) {
     gateway.get("/api/gateway").as(BodyCodec.jsonArray()).rxSend()
         .map(resp -> {
             if (resp.statusCode() != 200) {
-                error("Invalid response from the gateway: " + resp.statusCode());
+                new RuntimeException("Invalid response from the gateway: " + resp.statusCode());
             }
             return resp.body();
         })
@@ -335,7 +335,7 @@ private void products(RoutingContext rc) {
                         .rxSend()
                         .map(resp -> {
                             if (resp.statusCode() != 200) {
-                                error("Invalid response from inventory: " + resp.statusCode());
+                                new RuntimeException("Invalid response from the inventory: " + resp.statusCode());
                             }
                             return product.copy().put("quantity", resp.body().getInteger("quantity"));
                         }))
@@ -362,7 +362,7 @@ Open a new terminal window and start the Catalog service:
 
 [source,bash]
 ----
-$ cd gateway-spring-boot
+$ cd catalog-spring-boot
 $ mvn spring-boot:run
 ----
 

@@ -96,7 +96,7 @@ together in the OpenShift Web Console
 
 [source,bash]
 ----
-$ oc label dc app=coolstore --all --overwrite
+$ oc label dc,svc,route,is,bc app=coolstore --all --overwrite
 ----
 
 image::coolstore-pods-nodb.png[CoolStore Pods,width=900,align=center]
